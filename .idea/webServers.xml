@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="dd44aeed-e817-472a-a88f-8822069960a7" name="000WH" url="http://notices.techybyte.co.uk">
+        <fileTransfer host="files.000webhost.com" port="21" rootFolder="/public_html" password="dfdcdfffdfeedfcddf9cdfc7df9edfe6dffcdfd3dfebdfc4dfdbdf99dfe0dfed" username="kechb-notices">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
