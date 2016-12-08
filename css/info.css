@@ -1,17 +1,3 @@
-/* HTML TAGS */
-h1
-{
-	float: left;
-	width: 154px;
-	height: 105px;
-	margin: 0 4em 0 0;
-	padding: 0;
-	background-image: url(../images/logo.gif);
-	background-repeat: no-repeat;
-	font-size: 100%
-}
-
-
 h1 a
 {
 	display: block;
