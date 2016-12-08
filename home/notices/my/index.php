@@ -55,12 +55,12 @@ while ($row = $result->fetch_assoc()) {
     <?php } else {
         ?><p class="margin20">You have no notices :-(</p><?php
 }
-$result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` >= " . $todayDate . " ORDER BY `date` ASC;");
+$result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` >= " . $todayDate . " AND `user` != '" . $session->user->getUserId() . "' ORDER BY `date` ASC;");
 $aNs = $result->num_rows;
 ?>
             <h2 class="margin20">Other Notices</h2>
             <?php
-if ($aNs - $myNs != 0) {
+if ($aNs >= 1) {
     ?>
 
 <table class="margin20" width="100%">
