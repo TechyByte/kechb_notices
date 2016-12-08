@@ -29,7 +29,7 @@ class session {
     }
 
     public function newSession($userId) {
-        $newSessionExpiry = time() + 900; //Reset session expiry time, 15 minutes (15*60 = 900) from current time
+        $newSessionExpiry = time() + 3600; //Reset session expiry time, 60 minutes (60*60 = 3600) from current time
 
         $this->db = new db(); //Initialise database object for creating new session
         $idLookup = $this->db->queryForRow("SELECT MAX(id) FROM `sessions`;"); //Lookup most recent session
@@ -52,7 +52,7 @@ class session {
         $sessionRec = $this->db->queryForRow("SELECT expiry, userId FROM `sessions` WHERE `id`=" . $sessionId . ";");
         if (count($sessionRec) > 0) {
             //Renew session
-            $this->db->queryForNothing("UPDATE `sessions` SET `expiry` = '" . (time() + 900) . "' WHERE `sessions`.`id` = " . $sessionId . ";");
+            $this->db->queryForNothing("UPDATE `sessions` SET `expiry` = '" . (time() + 3600) . "' WHERE `sessions`.`id` = " . $sessionId . ";");
 
             //Initialise session object
             $this->selfInit($sessionId, $sessionRec["expiry"]);
