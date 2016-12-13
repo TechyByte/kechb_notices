@@ -6,7 +6,7 @@ $session = new session();
 $session->checkSession();
 $db = new db();
 $todayDate = date("Ymd");
-$result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` >= " . $todayDate . " ORDER BY `date` ASC;");
+$result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` " . (isset($_GET["today"]) ? "= " : ">= ") . $todayDate . " ORDER BY `date` ASC;");
 $first = true;
 ?>
 <table width="100%">

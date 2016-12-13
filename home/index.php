@@ -1,10 +1,9 @@
 <?php
 ini_set('display_errors',1);
 error_reporting(E_ALL);
-include_once("../functions/loadSession.php");
 include_once("../functions/session.php");
 $session = new session();
-$session->fetchSession($_COOKIE["session"]);
+$session->checkSession();
 /*echo("Welcome " . $session->user->getUserFirstName() . " " . $session->user->getUserLastName() . " (" . $session->user->getUserCode() . ", " . $session->user->getUserEmail() . ")" . ' <a href="account/signout/">Sign out</a><br />');
 echo("<h2>Actions</h2>");
 echo('<a href="notices/">Notices</a>');

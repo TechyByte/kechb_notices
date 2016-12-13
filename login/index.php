@@ -87,29 +87,40 @@ echo('<div data-role="dialog" data-place="top-center" data-type="' . $type . '" 
 }
 ?>
 </head>
-<body class="bg-darkTeal">
-<div class="login-form padding20 block-shadow">
-    <form action="process.php" method="post">
-        <h1 class="text-light">KE Camp Hill Intranet</h1>
-        <hr class="thin"/>
-        <p style="color:orangered" class="text-light">This is a secure site. Do not share your password.</p>
-        <div class="input-control text full-size" data-role="input">
-            <!--<label for="user_login">Username: </label>-->
-            <input placeholder="Username" type="text" name="code" id="user_login" value="">
-            <button class="button helper-button clear"><span class="mif-cross"></span></button>
+    <body class="bg-darkTeal">
+        <div class="login-form padding20 block-shadow">
+            <form action="process.php" method="post">
+                <h1 class="text-light">KE Camp Hill Intranet</h1>
+                <hr class="thin"/>
+                <p style="color:orangered" class="text-light">This is a secure site. Do not share your password.</p>
+                <div class="input-control text full-size" data-role="input">
+                    <!--<label for="user_login">Username: </label>-->
+                    <input placeholder="Username" type="text" name="code" id="user_login" value="">
+                    <button class="button helper-button clear"><span class="mif-cross"></span></button>
+                </div>
+                <br />
+                <div class="input-control password full-size" data-role="input">
+                    <!--<label for="user_password">Password: </label>-->
+                    <input placeholder="Password" type="password" id="user_password" name="password" value="">
+                    <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+                </div>
+                <br />
+                <div class="form-actions">
+                    <button type="submit" class="button primary">Login</button>
+                    <!--<button type="button" class="button link">Cancel</button>-->
+                </div>
+            </form>
+            <small style="font-size: x-small">Version: AWS-1.3</small>
         </div>
-        <br />
-        <div class="input-control password full-size" data-role="input">
-            <!--<label for="user_password">Password: </label>-->
-            <input placeholder="Password" type="password" id="user_password" name="password" value="">
-            <button class="button helper-button reveal"><span class="mif-looks"></span></button>
+        <div class="grid" style="position:fixed;bottom:0px;left:0px;right:0px;height:35px;margin-bottom:0px;">
+            <div class="row cells3 bg-darkerGray fg-white">
+                <div class="cell offset1 align-center v-align-middle" style="height:35px;">
+                    <p class="text-small">Copyright &copy; <?php echo date("Y"); ?> George Hynes and TechyByte Logistics</p>
+                </div>
+                <div class="cell align-right fg-white" style="padding-right:15px;text-wrap: none;">
+                    <p class="text-small"><a href="https://status.techybyte.co.uk">Service Status</a></p>
+                </div>
+            </div>
         </div>
-        <br />
-        <div class="form-actions">
-            <button type="submit" class="button primary">Login</button>
-            <!--<button type="button" class="button link">Cancel</button>-->
-        </div>
-    </form>
-</div>
-</body>
+    </body>
 </html>

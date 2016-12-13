@@ -24,6 +24,7 @@ class session {
             $this->fetchSession($_COOKIE["session"]); //Create session object based on session
             if ($this->sessionExpiry <= time()) { //If session expired
                 $this->redirect("login/?n=sexp"); //Redirect to login, with note that session expired
+                $this->setCookie($_COOKIE["session"], time()-1000);
             }
         }
     }
