@@ -5,28 +5,51 @@ include_once("user.php");
 include_once("group.php");
 include_once("mysql.php");
 
+if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+    $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+}
+
 class session {
     var $sessionId;
     var $sessionExpiry;
     var $user;
     var $group;
     var $db;
+    var $ip;
 
-    private function redirect($url, $permanent = false) { header('Location: ' . ((((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . "/" . $url), true, $permanent ? 301 : 302); exit(); }
+    private function redirect($url, $permanent = false) {
+        if ($permanent) {
+            header('Location: ' . ("https://notices.techybyte.co.uk/" . $url), true, 302);
+        } else {
+            header('Location: ' . ("https://notices.techybyte.co.uk/" . $url), true, 302);
+        }
+        exit(); }
 
-    private function setCookie($sessId, $expiry) { setcookie("session", $sessId, $expiry, "/"); }
+    private function setCookie($sessionId, $expiry) { setcookie("session", $sessionId, $expiry, "/"); }
 
     public function checkSession() {
         if (!isset($_COOKIE["session"])) { //If session cookie doesn't exist
             $this->noSession(); //Set current session object to all-zero
-            $this->redirect("login/"); //Redirect to login page
+            $this->setCookie($_COOKIE["session"], time()-1000);
+            $this->redirect("login/?h=t"); //Redirect to login page
         } else { //If session cookie does exist
             $this->fetchSession($_COOKIE["session"]); //Create session object based on session
             if ($this->sessionExpiry <= time()) { //If session expired
-                $this->redirect("login/?n=sexp"); //Redirect to login, with note that session expired
+                $this->killSession($_COOKIE["session"]);
                 $this->setCookie($_COOKIE["session"], time()-1000);
+                $this->redirect("login/?n=sexpa"); //Redirect to login, with note that session expired
+            }
+            if ($this->getIp()!=$_SERVER["REMOTE_ADDR"]) { // If session being used on an alternate host
+                $this->killSession($_COOKIE["session"]);
+                $this->setCookie($_COOKIE["session"], time()-1000);
+                $this->redirect("login/?n=sexpb");
             }
         }
+    }
+
+    public function killSession($sessionId) {
+        $this->db = new db();
+        $this->db->queryForNothing('UPDATE `sessions` SET `expiry` = \'0\' WHERE `sessions`.`id` = ' . $sessionId . ';');
     }
 
     public function newSession($userId) {
@@ -35,10 +58,10 @@ class session {
         $this->db = new db(); //Initialise database object for creating new session
         $idLookup = $this->db->queryForRow("SELECT MAX(id) FROM `sessions`;"); //Lookup most recent session
         $newSessionId = $idLookup["MAX(id)"] + 1; //Increment highest current session value by 1
-        $this->db->queryForNothing("INSERT INTO `sessions` (`id`, `expiry`, `userId`) VALUES ('" . $newSessionId . "', '" . $newSessionExpiry . "', '" . $userId . "');"); //Insert new session data in to table
+        $this->db->queryForNothing('INSERT INTO `sessions` (`id`, `expiry`, `userId`, `ip`) VALUES (\'' . $newSessionId . '\', \'' . $newSessionExpiry . '\', \'' . $userId . '\', \'' . $_SERVER["REMOTE_ADDR"] . '\');'); //Insert new session data in to table
 
         //Initialise session object
-        $this->selfInit($newSessionId, $newSessionExpiry);
+        $this->selfInit($newSessionId, $newSessionExpiry, $_COOKIE["session"]);
 
         //Set session cookie
         $this->setCookie($newSessionId, $newSessionExpiry);
@@ -50,13 +73,16 @@ class session {
 
     public function fetchSession($sessionId) {
         $this->db = new db();
-        $sessionRec = $this->db->queryForRow("SELECT expiry, userId FROM `sessions` WHERE `id`=" . $sessionId . ";");
+        $sessionRec = $this->db->queryForRow("SELECT expiry, userId, ip FROM `sessions` WHERE `id`=" . $sessionId . ";");
         if (count($sessionRec) > 0) {
             //Renew session
             $this->db->queryForNothing("UPDATE `sessions` SET `expiry` = '" . (time() + 3600) . "' WHERE `sessions`.`id` = " . $sessionId . ";");
 
+            //Set session cookie
+            $this->setCookie($sessionId, (time() + 3600));
+
             //Initialise session object
-            $this->selfInit($sessionId, $sessionRec["expiry"]);
+            $this->selfInit($sessionId, $sessionRec["expiry"], $sessionRec["ip"]);
 
             //Initialise contained objects
             $this->setUser($sessionRec["userId"]);
@@ -67,12 +93,13 @@ class session {
     }
 
     public function noSession() {
-        $this->selfInit(0, 0);
+        $this->selfInit(0, 0, "0.0.0.0");
     }
 
-    private function selfInit($sessionId, $sessionExpiry) {
+    private function selfInit($sessionId, $sessionExpiry, $sessionIp) {
         $this->setSessionId($sessionId);
         $this->setSessionExpiry($sessionExpiry);
+        $this->setIp($sessionIp);
         $this->db = new db();
     }
 
@@ -86,7 +113,7 @@ class session {
 
     public function signOut() {
         $this->checkSession();
-        $this->db->queryForNothing("UPDATE `sessions` SET `expiry` = '" . (time()-1) . "' WHERE `sessions`.`id` = " . $this->sessionId . ";");
+        $this->db->queryForNothing("UPDATE `sessions` SET `expiry` = '" . (1) . "' WHERE `sessions`.`id` = " . $this->sessionId . ";");
         $this->setCookie($this->sessionId, (time()-900));
     }
 
@@ -110,5 +137,21 @@ class session {
         $this->group->setGroupName($groupRec["name"]);
         $this->group->setHomepage($groupRec["homepage"]);
         $this->group->setAdmin($groupRec["admin"]);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * @param mixed $ip
+     */
+    private function setIp($ip)
+    {
+        $this->ip = $ip;
     }
 }

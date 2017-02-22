@@ -1,4 +1,5 @@
 <?php
+include("mysql.php");
 class user {
     var $userFirstName;
     var $userLastName;
@@ -6,8 +7,18 @@ class user {
     var $userGroupId;
     var $userId;
     var $userEmail;
+    var $db;
 
-
+    public function setUser($userId) {
+        $this->db = new db();
+        $userRec = $this->db->queryForRow("SELECT * FROM `users` WHERE `id`=".$userId);
+        $this->setUserFirstName($userRec["firstName"]);
+        $this->setUserLastName($userRec["lastName"]);
+        $this->setUserCode($userRec["code"]);
+        $this->setUserGroupId($userRec["groupId"]);
+        $this->setUserId($userId);
+        $this->setUserEmail($userRec["email"]);
+    }
 
     /**
      * @return mixed

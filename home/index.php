@@ -2,13 +2,9 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 include_once("../functions/session.php");
+include_once("../info.php");
 $session = new session();
 $session->checkSession();
-/*echo("Welcome " . $session->user->getUserFirstName() . " " . $session->user->getUserLastName() . " (" . $session->user->getUserCode() . ", " . $session->user->getUserEmail() . ")" . ' <a href="account/signout/">Sign out</a><br />');
-echo("<h2>Actions</h2>");
-echo('<a href="notices/">Notices</a>');
-echo('<a href="assemblies/">Assemblies</a>');
-echo('<a href="account/">Account Management</a>');*/
 $db = new db();
 $todayDate = date("Ymd");
 $result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` >= " . $todayDate . " AND `user` = '" . $session->user->getUserId() . "' ORDER BY `date` ASC LIMIT 6;");
@@ -42,7 +38,7 @@ $first = true;
             left: 100px;
         }
 
-        .tile, .tile-small, .tile-sqaure, .tile-wide, .tile-large, .tile-big, .tile-super {
+        .tile, .tile-small, .tile-square, .tile-wide, .tile-large, .tile-big, .tile-super {
             opacity: 0;
             -webkit-transform: scale(.8);
             transform: scale(.8);
@@ -119,7 +115,7 @@ $first = true;
         $(function(){
             $.StartScreen();
 
-            var tiles = $(".tile, .tile-small, .tile-sqaure, .tile-wide, .tile-large, .tile-big, .tile-super");
+            var tiles = $(".tile, .tile-small, .tile-square, .tile-wide, .tile-large, .tile-big, .tile-super");
 
             $.each(tiles, function(){
                 var tile = $(this);
@@ -274,7 +270,7 @@ $first = true;
                 <div class="tile-content iconic">
                     <span class="icon mif-notification"></span>
                 </div>
-                <span class="tile-label">New Notice</span>
+                <span class="tile-label"><?php echo(($session->user->getUserCode() == "KLBS") ? "KLB Slave: Click here!" : "New Notice"); ?></span>
             </a>
 
             <!--<div class="tile bg-darkBlue fg-white" data-role="tile" onclick="document.location.href='http://gmail.com'">
@@ -284,17 +280,17 @@ $first = true;
                 <span class="tile-label">Inbox</span>
             </div>-->
 
-            <div class="tile-large bg-steel fg-white" data-role="tile" data-on-click="document.location.href='notices/my/'">
+            <div class="tile-large bg-steel fg-white" data-role="tile" data-on-click="document.location.href='https://notices.techybyte.co.uk/home/notices/my/?hi=34&rag=<?php echo uniqid();?>'">
                 <div class="tile-content" id="weather_bg" style="background: top left no-repeat; background-size: cover">
                     <div class="padding10">
                         <?php
                         while ($row = $result->fetch_assoc()) {
-                            echo('<p class="no-margin text-shadow">'.date("d/m/y", strtotime($row["date"])).': '.$row["title"].' - '.substr($row["body"], 0, 30).'...</p>');
+                            echo('<p class="no-margin text-shadow">'.date("d/m/y", strtotime($row["date"])).': '.$row["title"].' - '.substr(strip_tags($row["body"]), 0, 60).'...</p>');
                         }
                         ?>
                     </div>
                 </div>
-                <span class="tile-label">My Notices</span>
+                <span class="tile-label">Notices</span>
             </div>
         </div>
     </div>
@@ -322,10 +318,14 @@ $first = true;
                 </div>
                 <span class="tile-label">Add User</span>
             </div>
-            <?php }
-            if ($session->group->getAdmin() == 1) { ?>
-                <div class="tile-container"><a href="notices/password/" class="tile bg-darkRed fg-white" data-role="tile"><div class="tile-content iconic"><span class="icon mif-database"></span></div><span class="tile-label">Database Management</span></a></div>
+            <div class="tile bg-amber fg-white" data-role="tile" onclick="document.location.href='account/sessions/'">
+                <div class="tile-content iconic">
+                    <span class="icon mif-table"></span>
+                </div>
+                <span class="tile-label">View Sessions</span>
+            </div>
             <?php } ?>
+            <div class="tile-container"><a href="https://status.techybyte.co.uk/" class="tile bg-darkRed fg-white" data-role="tile"><div class="tile-content iconic"><span id="service-status-icon"><span class="icon mif-loop2 mif-ani-pulse"></span></span></div><span class="tile-label">Service Status</span></a></div>
 
                 <!--<div class="tile bg-lightGreen fg-white" data-role="tile" data-on-click="document.location.href='account/user/'">
                     <div class="tile-content" id="weather_bg" style="background: top left no-repeat; background-size: cover">
@@ -337,9 +337,32 @@ $first = true;
                 </div>-->
         </div>
     </div>
+    <script>
+        window.addEventListener("load", function () {
+            setTimeout(animation, <?php echo(1500 + (rand(0,20)*100)); ?>)
+        }, false);
+        function animation() {
+            var status = '<?php echo(file_get_contents("../functions/status/status.data")); ?>';
+            if (status == 'OK')
+            {
+                var icon = '<span class="icon mif-ani-bounce mif-thumbs-up"></span>';
+                setTimeout(stopThumbs, 1500);
+            } else {
+                var icon = '<span class="icon mif-ani-flash mif-warning"></span>';
+                setTimeout(stopFlash, 3050);
+            }
+            document.getElementById("service-status-icon").innerHTML = icon;
+        }
+        function stopThumbs() {
+            document.getElementById("service-status-icon").innerHTML = '<span class="icon mif-ani-hover-bounce mif-thumbs-up"></span>';
+        }
+        function stopFlash() {
+            document.getElementById("service-status-icon").innerHTML = '<span class="icon mif-ani-hover-flash mif-warning"></span>';
+        }
+    </script>
     <div class="tile-group double"><span class="tile-group-title">Assemblies</span>
         <div class="tile-container">
-            <div class="tile-wide bg-lightRed fg-white" data-role="tile" data-on-click="document.location.href='assemblies/view/'">
+            <div class="tile-wide bg-lightRed fg-white" data-role="tile"<?php if ($session->group->getAdmin() == 1) { ?> data-on-click="document.location.href='assemblies/view/'"<?php } ?>>
             <div class="tile-content" id="ass_bg" style="background: top left no-repeat; background-size: cover">
                 <div class="padding10">
                     <?php
@@ -350,7 +373,7 @@ $first = true;
                     ?>
                 </div>
             </div>
-            <span class="tile-label">View Assemblies</span>
+            <span class="tile-label">Assemblies</span>
         </div>
         <?php
 if ($session->group->getAdmin() == 1) { ?>
@@ -515,5 +538,18 @@ if ($session->group->getAdmin() == 1) { ?>
         </div>
     </div>-->
 </div>
+    <div class="grid" style="position:fixed;bottom:0px;left:0px;right:0px;height:35px;margin-bottom:0px;">
+        <div class="row cells3 bg-darkerGray fg-white">
+            <div class="cell align-left v-align-middle" style="padding-left:15px;text-wrap: none;height:35px;">
+                <p class="text-small"><?php echo $info->getPrettyVersion();?></p>
+            </div>
+            <div class="cell align-center v-align-middle" style="height:35px;">
+                <p class="text-small"><?php echo $info->getPrettyCopyright();?></p>
+            </div>
+            <div class="cell align-right fg-white" style="padding-right:15px;text-wrap: none;">
+                <p class="text-small"><a href="https://status.techybyte.co.uk">Service Status</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

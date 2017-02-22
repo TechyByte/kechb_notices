@@ -13,7 +13,7 @@ if (isset($_POST["title"]) && isset($_POST["body"]) && isset($_POST["dates"])) {
     if (!empty($_POST["title"]) && !empty($_POST["body"]) && !empty($_POST["dates"])) {
         $notice = new notice();
         foreach ($_POST['dates'] as $date => $entry) {
-            $notice->newNotice(addslashes($_POST["title"]), addslashes($_POST["body"]), $entry);
+            $notice->newNotice($_POST["title"], $_POST["body"], $entry);
         }
         redirect("home/notices/my/?n=suc"); //SUCCESS notice
     } else {

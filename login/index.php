@@ -85,11 +85,12 @@ echo('<div data-role="dialog" data-place="top-center" data-type="' . $type . '" 
         </div></div>');
     echo('<script>var dialog = $("#dialog").data("dialog");dialog.open();</script>');
 }
+include_once("../info.php");
 ?>
 </head>
     <body class="bg-darkTeal">
         <div class="login-form padding20 block-shadow">
-            <form action="process.php" method="post">
+            <form action="https://notices.techybyte.co.uk/login/process.php" method="post">
                 <h1 class="text-light">KE Camp Hill Intranet</h1>
                 <hr class="thin"/>
                 <p style="color:orangered" class="text-light">This is a secure site. Do not share your password.</p>
@@ -110,12 +111,12 @@ echo('<div data-role="dialog" data-place="top-center" data-type="' . $type . '" 
                     <!--<button type="button" class="button link">Cancel</button>-->
                 </div>
             </form>
-            <small style="font-size: x-small">Version: AWS-1.3</small>
+            <small style="font-size: x-small">Version: <?php echo $info->getPrettyVersion();?></small>
         </div>
         <div class="grid" style="position:fixed;bottom:0px;left:0px;right:0px;height:35px;margin-bottom:0px;">
             <div class="row cells3 bg-darkerGray fg-white">
                 <div class="cell offset1 align-center v-align-middle" style="height:35px;">
-                    <p class="text-small">Copyright &copy; <?php echo date("Y"); ?> George Hynes and TechyByte Logistics</p>
+                    <p class="text-small"><?php echo $info->getPrettyCopyright();?></p>
                 </div>
                 <div class="cell align-right fg-white" style="padding-right:15px;text-wrap: none;">
                     <p class="text-small"><a href="https://status.techybyte.co.uk">Service Status</a></p>

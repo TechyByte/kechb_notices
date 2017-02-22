@@ -1,5 +1,5 @@
 <?php
-$root = ((((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://") . $_SERVER['HTTP_HOST']."/");
+$root = "https://notices.techybyte.co.uk/";
 echo('<head>');
 echo('<meta charset="UTF-8">');
 echo('<meta http-equiv="X-UA-Compatible" content="IE=edge">');

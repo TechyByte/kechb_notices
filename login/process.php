@@ -1,7 +1,7 @@
 <?php
 include_once("../functions/session.php");
 
-function redirect($url, $permanent = false) { header('Location: ' . ((((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . "/" . $url), true, $permanent ? 301 : 302); exit(); }
+function redirect($url, $permanent = false) { header('Location: ' . ("https://notices.techybyte.co.uk/" . $url), true, $permanent ? 301 : 302); exit(); }
 
 if (!isset($_POST["code"])) {
     redirect("login/?n=nu"); //NO USERNAME notice

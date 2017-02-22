@@ -31,7 +31,7 @@
     <br />
     <input placeholder="Email" type="text" name="email" value="">
     <br />
-    <select name="groupId">
+    <select name="groupId" title="Groups">
         <option value="1" selected>Admin</option>
         <option value="2">Staff</option>
     </select>

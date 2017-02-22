@@ -21,7 +21,7 @@ $first = true;
 
     <?php
     while ($row = $result->fetch_assoc()) {
-        echo('<tr><td>'.date("l jS F Y", strtotime($row["date"])).'</td><td>'.$row["title"].'</td><td>'.$row["body"].'</td><td>'.$db->queryForRow("SELECT * FROM `users` WHERE `id`='".$row["user"]."';")["code"].'</td><td><a href="../delete/?r=all&id='. $row["id"] .'">Delete</a></td></td></tr>');
+        echo('<tr><td>'.date("l jS F Y", strtotime($row["date"])).'</td><td>'.$row["title"].' #'.$row["id"].'</td><td>'.$row["body"].'</td><td>'.$db->queryForRow("SELECT * FROM `users` WHERE `id`='".$row["user"]."';")["code"].'</td><td><a href="../delete/?r=all&id='. $row["id"] .'">Delete</a></td></td></tr>');
     }
     ?>
 

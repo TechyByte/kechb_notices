@@ -2,19 +2,20 @@
 ini_set('display_errors',1);
 error_reporting(E_ALL);
 include_once("../../../functions/session.php");
-include_once("../../../header.php");
 $session = new session();
 $session->checkSession();
 $db = new db();
 $todayDate = date("Ymd");
 $result = $db->queryForRows("SELECT * FROM `notices` WHERE `date` >= " . $todayDate . " AND `user` = '" . $session->user->getUserId() . "' ORDER BY `date` ASC;");
 $myNs = $result->num_rows;
+include_once("../../../header.php");
 ?>
 <style>
     td {
         vertical-align: top;
     }
 </style>
+<SCRIPT TYPE="text/javascript"> function popup(mylink, windowname) { if (! window.focus)return true; var href; if (typeof(mylink) == 'string') href=mylink; else href=mylink.href; window.open(href, windowname, 'width=400,height=350,scrollbars=no'); return false; } </SCRIPT>
 <body class="bg-grayDark">
 <div class="grid" style="padding-top:3%;">
     <div class="row cells12">
@@ -32,7 +33,7 @@ $myNs = $result->num_rows;
 <?php
 if ($myNs >= 1) {
 ?>
-<table width="100%" class="margin20">
+<table style="width:97%" class="table striped margin20">
     <tbody>
     <tr>
         <td style="width:20%;"><b>Date</b></td>
@@ -45,7 +46,7 @@ if ($myNs >= 1) {
 <?php
 while ($row = $result->fetch_assoc()) {
     $nOwner = $db->queryForRow("SELECT * FROM `users` WHERE `id`='".$row["user"]."';");
-    echo('<tr><td style="padding-right:5px;">'.date("l jS F Y", strtotime($row["date"])).'</td><td style="padding-right:5px;">'.$row["title"].'</td><td style="padding-right:5px;">'.$row["body"].'</td><td style="padding-right:5px;"><a href= "" style="background-color:#FFFFFF;color:#000000;text-decoration:none" title="' . $nOwner["lastName"] . ', ' . $nOwner["firstName"] . '">'.$nOwner["code"].'</a></td><td style="padding-right:5px;"><a href="../delete/?r=my&id='. $row["id"] .'">Delete</a></td></td></tr>');
+    echo('<tr><td style="padding-right:5px;">'.date("l jS F Y", strtotime($row["date"])).'</td><td style="padding-right:5px;">'.$row["title"].'</td><td style="padding-right:5px;">'.$row["body"].'</td><td style="padding-right:5px;"><a href= "" style="color:#000000;text-decoration:none" title="' . $nOwner["lastName"] . ', ' . $nOwner["firstName"] . '">'.$nOwner["code"].'</a></td><td style="padding-right:5px;"><a href="../delete/?r=my&id='. $row["id"] .'">Delete</a></td></td></tr>');
 }
 ?>
 
@@ -63,7 +64,7 @@ $aNs = $result->num_rows;
 if ($aNs >= 1) {
     ?>
 
-<table class="margin20" width="100%">
+<table class="table margin20 striped" style="width:97%">
     <tbody>
     <tr>
         <td style="width:20%;"><b>Date</b></td>
@@ -76,7 +77,7 @@ if ($aNs >= 1) {
     <?php
     while ($row = $result->fetch_assoc()) {
         $nOwn = $db->queryForRow("SELECT * FROM `users` WHERE `id`='".$row["user"]."';");
-        echo('<tr><td style="padding-right:5px;">'.date("l jS F Y", strtotime($row["date"])).'</td><td style="padding-right:5px;">'.$row["title"].'</td><td style="padding-right:5px;">'.$row["body"].'</td><td style="padding-right:5px;"><a href= "" style="background-color:#FFFFFF;color:#000000;text-decoration:none" title="' . $nOwn["lastName"] . ', ' . $nOwn["firstName"] . '">'.$nOwn["code"].'</a></td>' . (($session->group->getAdmin()==1 || $session->user->getUserCode() == $nOwn["code"]) ? ('<td style="padding-right:5px;"><a href="../delete/?r=my&id='. $row["id"] .'">Delete</a></td>') : ("")) . '</tr>');
+        echo('<tr><td style="padding-right:5px;">'.date("l jS F Y", strtotime($row["date"])).'</td><td style="padding-right:5px;">'.$row["title"].'</td><td style="padding-right:5px;">'.$row["body"].'</td><td style="padding-right:5px;"><a onClick="return popup(this, \'User Notes\')" href= "../../account/info.php?u=' . $row["user"] . '" style="color:#000000;text-decoration:none" title="' . $nOwn["lastName"] . ', ' . $nOwn["firstName"] . '">'.$nOwn["code"].'</a></td>' . (($session->group->getAdmin()==1 || $session->user->getUserCode() == $nOwn["code"]) ? ('<td style="padding-right:5px;"><a href="../delete/?r=my&id='. $row["id"] .'">Delete</a></td>') : ("")) . '</tr>');
     }
     ?>
 

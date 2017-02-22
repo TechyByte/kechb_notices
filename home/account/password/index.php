@@ -96,6 +96,7 @@ switch ($_GET["n"]) {
         $title = "Invalid user.";
         $body = "Invalid user specified. Please try again.";
         $type = "alert";
+        break;
     case "una":
         $title = "Unauthorised.";
         $body = "You do not hold sufficient privileges to perform the requested operation.";

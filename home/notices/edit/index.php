@@ -8,7 +8,7 @@ $session->checkSession();
     <div class="grid" style="padding-top:10%;">
         <div class="row cells3">
             <div class="cell bg-white offset1 padding20">
-                <h1>Create a New Notice</h1>
+                <h1>Edit Notice</h1>
                 <form action="process.php" method="post">
                     <div class="input-control text">
                         <b>Title</b>
@@ -31,15 +31,7 @@ $session->checkSession();
                     while ($row = $result->fetch_assoc()) {
                         if ($first) {
                             $first = false;
-                            if (($row["date"] == $todayDate)) {
-                                echo('<label class="input-control checkbox small-check"><input type="checkbox" name="dates[]" value="' . $row["id"] . '" checked="checked"><span class="check"></span><span class="caption">' . ("<b>(Today)</b> ") . date("l jS F Y", strtotime($row["date"])) . '</span></label><br />');
-                            } else {
-                                if (($row["date"] == $todayDate + 1)) {
-                                    echo('<label class="input-control checkbox small-check"><input type="checkbox" name="dates[]" value="' . $row["id"] . '" checked="checked"><span class="check"></span><span class="caption">' . ("<b>(Tomorrow)</b> ") . date("l jS F Y", strtotime($row["date"])) . '</span></label><br />');
-                                } else {
-                                    echo('<label class="input-control checkbox small-check"><input type="checkbox" name="dates[]" value="' . $row["id"] . '" checked="checked"><span class="check"></span><span class="caption">' . ("<b>(Next Assembly)</b> ") . date("l jS F Y", strtotime($row["date"])) . '</span></label><br />');
-                                }
-                            }
+                            echo('<label class="input-control checkbox small-check"><input type="checkbox" name="dates[]" value="' . $row["id"] . '" checked="checked"><span class="check"></span><span class="caption">' . (($row["date"] == $todayDate) ? "<b>(Today)</b> " : "" ) . date("l jS F Y", strtotime($row["date"])) . '</span></label><br />');
                         } else {
                             echo('<label class="input-control checkbox small-check"><input type="checkbox" name="dates[]" value="' . $row["id"] . '"><span class="check"></span><span class="caption">' . date("l jS F Y", strtotime($row["date"])) . '</span></label><br />');
                         }
