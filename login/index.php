@@ -1,3 +1,8 @@
+<?php
+if (strtoupper($_SERVER["HTTP_HOST"]) == "ISITWEEKA.COM" || strtoupper($_SERVER["HTTP_HOST"]) == "WWW.ISITWEEKA.COM") {
+    header('Location: ' . ("https://isitweeka.com/isitweeka/"), true, 302);
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +11,7 @@
 
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
 
-    <title>KE Camp Hill Intranet: Login</title>
+    <title>Intranet Login</title>
 
     <link href="../css/metro.css" rel="stylesheet">
     <link href="../css/metro-icons.css" rel="stylesheet">
@@ -18,9 +23,9 @@
     <style>
         .login-form {
             width: 25rem;
-            height: 17.75rem;
+            height: 21rem;
             position: fixed;
-            top: 50%;
+            top: 40%;
             margin-top: -9.375rem;
             left: 50%;
             margin-left: -12.5rem;
@@ -29,9 +34,59 @@
             -webkit-transform: scale(.8);
             transform: scale(.8);
         }
+        #suggestion-box{
+            float:left;
+            margin-top:-15px;
+            padding:0;
+            width:390px;
+            position: absolute;
+            z-index: 2;
+        }
+        #suggestion-box ul {
+            list-style-type:none;
+        }
+        #site-list li {
+            padding: 10px;
+            background: #f0f0f0;
+            border-bottom: #bbb9b9 1px solid;
+        }
+        #site-list li:hover {
+            background: rgb(96, 168, 236);
+            cursor: pointer;
+        }
     </style>
 
     <script>
+        // AJAX call for autocomplete
+        $(document).ready(function(){
+            $("#search-box").keyup(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "../api/site.php",
+                    data:'id='+$(this).val(),
+                    beforeSend: function(){
+                        $("#search-box").css("background","#FFF url(LoaderIcon.gif) no-repeat 165px");
+                    },
+                    success: function(data){
+                        $("#suggestion-box").show();
+                        $("#search-box").blur(function() {
+                            setTimeout(function() {
+                                $("#suggestion-box").hide();
+                            }, 300);
+                        });
+                        $("#suggestion-box").html(data);
+                        $("#search-box").css("background","#FFF");
+                    }
+                });
+            });
+        });
+        //To select name
+        function selectSite(val) {
+            $("#search-box").val(val);
+            $("#suggestion-box").hide();
+        }
+
+
         $(function(){
             var form = $(".login-form");
 
@@ -45,6 +100,7 @@
         });
     </script>
 <?php
+
 $type = "info";
 $title = "Unknown Error";
 $body = "Please try again or contact the Technical Team for assistance.";
@@ -90,10 +146,14 @@ include_once("../info.php");
 </head>
     <body class="bg-darkTeal">
         <div class="login-form padding20 block-shadow">
-            <form action="https://notices.techybyte.co.uk/login/process.php" method="post">
-                <h1 class="text-light">KE Camp Hill Intranet</h1>
+            <form action="process.php" method="post">
+                <h1 class="text-light">Intranet Login</h1>
                 <hr class="thin"/>
                 <p style="color:orangered" class="text-light">This is a secure site. Do not share your password.</p>
+                <div class="input-control frmSearch full-size" data-role="input">
+                    <input type="text" id="search-box" placeholder="Site/Centre Number" value="20149"/>
+                    <div id="suggestion-box"></div>
+                </div>
                 <div class="input-control text full-size" data-role="input">
                     <!--<label for="user_login">Username: </label>-->
                     <input placeholder="Username" type="text" name="code" id="user_login" value="">

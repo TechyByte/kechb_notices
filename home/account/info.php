@@ -15,7 +15,7 @@ $session->checkSession();
 $u = new user();
 $g = new group();
 if (!isset($_GET["u"])) {
-    die('No parameters provided. <a href="https://notices.techybyte.co.uk">Return to home</a>');
+    die('No parameters provided. <a href="https://'.$_SERVER['HTTP_HOST'].'>Return to home</a>');
 }
 $u->setUser($_GET["u"]);
 $g->setGroup($u->getUserGroupId());

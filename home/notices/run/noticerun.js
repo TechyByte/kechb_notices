@@ -3,7 +3,7 @@
  */
 
 var currentId = 0;
-var url = "https://notices.techybyte.co.uk/home/notices/run/api.php";
+var url = "api.php";
 var o = new Date();
 var m = "January,February,March,April,May,June,July,August,September,October,November,December".split(",")[o.getMonth()];
 var mr = o.getMonth()+1;
@@ -33,21 +33,18 @@ function update() {
                 $("#notice-container").fadeOut();
                 $("body").css({ backgroundColor: "#"+nextColor});
                 setTimeout(function() {
-                    $("#body-js-cont").html('<div id="body" style="height:740px;width:1230px;" class="body container">'+data['body']+'</div>');
-                    $("#title-js-cont").html('<div id="title" style="height:180px;width:1230px;" class="title container">'+data['title']+'</div>');
+                    $("#body-js-cont").html('<div id="body" style="height:740px;width:1200px;" class="body container">'+data['body']+'</div>');
+                    $("#title-js-cont").html('<div id="title" style="height:180px;width:1200px;" class="title container">'+data['title']+'</div>');
                     $("#notice-container").fadeIn();
-                    $("#notice-container").fadeIn();
+                }, 390);
+                setTimeout(function() {
                     $('#title').boxfit({maximum_font_size: 112, align_center: false});
                     $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                    setTimeout(function() {
-                        $('#title').boxfit({maximum_font_size: 112, align_center: false});
-                        $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                        setTimeout(function() {
-                            $('#title').boxfit({maximum_font_size: 112, align_center: false});
-                            $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                        }, 80)
-                    }, 80);
-                }, 390);
+                }, 400)
+                setTimeout(function() {
+                    $('#title').boxfit({maximum_font_size: 112, align_center: false});
+                    $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
+                }, 500);
             }
         });
     } else {
@@ -62,20 +59,20 @@ function update() {
                 $("#notice-container").fadeOut();
                 $("body").css({ backgroundColor: "#"+nextColor});
                 setTimeout(function() {
-                $("#body-js-cont").html('<div id="body" style="height:740px;width:1230px;" class="body container">'+data['body']+'</div>');
-                $("#title-js-cont").html('<div id="title" style="height:180px;width:1230px;" class="title container">'+data['title']+'</div>');
-                $("#notice-container").fadeIn();
+                    $("#body-js-cont").html('<div id="body" style="height:740px;width:1200px;" class="body container">'+data['body']+'</div>');
+                    $("#title-js-cont").html('<div id="title" style="height:180px;width:1200px;" class="title container">'+data['title']+'</div>');
                     $('#title').boxfit({maximum_font_size: 112, align_center: false});
                     $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                    setTimeout(function() {
-                        $('#title').boxfit({maximum_font_size: 112, align_center: false});
-                        $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                        setTimeout(function() {
-                            $('#title').boxfit({maximum_font_size: 112, align_center: false});
-                            $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
-                        }, 80)
-                    }, 80);
+                    $("#notice-container").fadeIn();
                 }, 390);
+                setTimeout(function() {
+                    $('#title').boxfit({maximum_font_size: 112, align_center: false});
+                    $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
+                }, 400)
+                setTimeout(function() {
+                    $('#title').boxfit({maximum_font_size: 112, align_center: false});
+                    $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
+                }, 500);
             }
         });
     }
@@ -89,7 +86,7 @@ function doBanner() {
         type: 'GET',
         async: true,
         success: function (data) {
-            $("#scrolling").html("King Edward VI Camp Hill School for Boys - "+d+nth(d)+" "+m+" "+y+" - "+data);
+            $("#scrolling").html("King Edward VI Camp Hill School for Boys - "+d+nth(d)+" "+m+" "+y+currentWeek+" - "+data);
         }
     });
 }
@@ -106,12 +103,48 @@ function startTime() {
     var t = setTimeout(startTime, 500);
 }
 
+var currentWeek = "";
+
+function getWeek() {
+    $.ajax({
+        type: 'GET',
+        url: "https://notices.techybyte.co.uk/isitweeka/api.php",
+        dataType: 'json',
+        success: function (data) {
+            var week;
+            switch (data["code"]) {
+                case "A":
+                    week = " (Week A)";
+                    break;
+                case "B":
+                    week = " (Week B)";
+                    break;
+                case "WA":
+                    week = " (Week B)";
+                    break;
+                case "WB":
+                    week = " (Week A)";
+                    break;
+                default:
+                    week = ""
+            }
+            currentWeek = week;
+        }
+    });
+}
+
 function checkTime(i) {
     if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
     return i;
 }
 
-doBanner();
+getWeek();
+
+setTimeout(function() {
+    doBanner();
+}, 2000);
+
+setInterval(getWeek(), 60*60*1000);
 setInterval(doBanner(), 60*60*1000);
 
 startTime();
@@ -121,7 +154,12 @@ setTimeout(function(){
     setInterval(function(){update();}, 10000);
 }, 2250);
 
-setInterval(function(){
+setTimeout(function() {
+    $('#title').boxfit({maximum_font_size: 112, align_center: false});
+    $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
+}, 50);
+
+/* setInterval(function(){
     $('#title').boxfit({maximum_font_size: 112, align_center: false});
     $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
     setTimeout(function() {
@@ -132,4 +170,4 @@ setInterval(function(){
             $('#body').boxfit({multiline: true, maximum_font_size: 84, align_middle: false, align_center: false});
         }, 90)
     }, 90)
-}, 1000);
+}, 1000); */

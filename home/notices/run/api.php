@@ -25,11 +25,15 @@ class api {
         if ($firstOn != "0") {
             $this->setNextOn($firstOn);
         } else {
-            $this->setId(0);
-            $this->setTitle("No Notices");
-            $this->setBody("<h4>No Notices Available Now</h4><p>This is likely because today is not listed as having an assembly.</p>");
-            $this->setColor();
+            $this->noNotices();
         }
+    }
+
+    public function noNotices() {
+        $this->setId(0);
+        $this->setTitle("No Notices");
+        $this->setBody("<h4>No Notices Available Now</h4><p>This is likely because today is not listed as having an assembly.</p>");
+        $this->setColor();
     }
 
     public function next($id) {
@@ -68,7 +72,11 @@ class api {
         if (($position + 1) == $countNotices) {
             return $this->getFirstOnId();
         } else {
-            return $this->getTodayIds()[$position+1];
+            if ($countNotices == 0) {
+                $this->noNotices();
+            } else {
+                return $this->getTodayIds()[$position+1];
+            }
         }
     }
 
@@ -167,6 +175,21 @@ class api {
             "0B4D5B",
             "077816",
             "087768");
+        $colorDb = new db();
+
+        $colorResult = $colorDb->queryForRows("SELECT * FROM `color` WHERE `date` = " . date("Ymd") . ";");
+
+        if ($colorResult->num_rows > 0) {
+            while ($row = $colorResult->fetch_assoc()) {
+                $newColors = explode(",", $row["color"]) ;
+            }
+            $colors = array();
+            while(count($colors) <= 16){
+                $colors = array_merge($colors, $newColors);
+            }
+            $colors = array_slice($colors, 0, 16);
+        }
+
         switch ($this->getTitle()) {
             case "Technical Team":
                 $color = "000000";
@@ -195,7 +218,16 @@ if (isset($_GET["action"])) {
     if (isset($_GET["data"])) {
         switch ($_GET["action"]) {
             case "next":
-                $api->next($_GET["data"]);
+                //This section (lines 222-226) has been altered between the release present on 2017-09-19 and the next push of code
+                if ($this->getFirstOnId()!=0) {
+                    $api->next($_GET["data"]);
+                } else {
+                    $api->noNotices();
+                }
+                //End section
+                // Was:
+                // $api->next($_GET["data"]);
+                //End was
                 break;
             default:
                 $api->setError(1);

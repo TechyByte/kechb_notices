@@ -19,9 +19,9 @@ class session {
 
     private function redirect($url, $permanent = false) {
         if ($permanent) {
-            header('Location: ' . ("https://notices.techybyte.co.uk/" . $url), true, 302);
+            header('Location: ' . ("https://".$_SERVER['HTTP_HOST']."/" . $url), true, 302);
         } else {
-            header('Location: ' . ("https://notices.techybyte.co.uk/" . $url), true, 302);
+            header('Location: ' . ("https://".$_SERVER['HTTP_HOST']."/" . $url), true, 302);
         }
         exit(); }
 

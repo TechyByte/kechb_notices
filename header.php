@@ -1,5 +1,5 @@
 <?php
-$root = "https://notices.techybyte.co.uk/";
+$root = "https://".$_SERVER['HTTP_HOST']."/";
 echo('<head>');
 echo('<meta charset="UTF-8">');
 echo('<meta http-equiv="X-UA-Compatible" content="IE=edge">');
