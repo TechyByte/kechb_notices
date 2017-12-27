@@ -56,7 +56,7 @@ class api {
         $this->setTodayIds($todayIds);
     }
 
-    private function getFirstOnId() {
+    public function getFirstOnId() {
         $this->loadTodayIds();
         if (count($this->getTodayIds()) > 0) {
             return $this->getTodayIds()[0];
@@ -219,7 +219,7 @@ if (isset($_GET["action"])) {
         switch ($_GET["action"]) {
             case "next":
                 //This section (lines 222-226) has been altered between the release present on 2017-09-19 and the next push of code
-                if ($this->getFirstOnId()!=0) {
+                if ($api->getFirstOnId()!=0) {
                     $api->next($_GET["data"]);
                 } else {
                     $api->noNotices();
