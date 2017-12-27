@@ -78,6 +78,7 @@ class api {
                 return $this->getTodayIds()[$position+1];
             }
         }
+        return 0;
     }
 
     public function setError(int $error) {

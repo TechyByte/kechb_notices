@@ -108,7 +108,7 @@ var currentWeek = "";
 function getWeek() {
     $.ajax({
         type: 'GET',
-        url: "https://notices.techybyte.co.uk/isitweeka/api.php",
+        url: "https://notices.techybyte.co.uk/home/notices/week.php",
         dataType: 'json',
         success: function (data) {
             var week;
@@ -144,8 +144,8 @@ setTimeout(function() {
     doBanner();
 }, 2000);
 
-setInterval(getWeek(), 60*60*1000);
-setInterval(doBanner(), 60*60*1000);
+setInterval(getWeek(), 50*60*1000);
+setInterval(doBanner(), 50*60*1000);
 
 startTime();
 
