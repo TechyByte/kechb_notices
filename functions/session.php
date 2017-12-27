@@ -26,7 +26,7 @@ class session {
         exit(); }
 
     private function redirectLogin($code) {
-        header('Location: ' . ("https://sso-ext.techybyte.co.uk/login?".$code), true, 302);
+        header('Location: ' . ("https://notices.techybyte.co.uk/login?".$code), true, 302);
     }
 
     private function setCookie($sessionId, $expiry) { setcookie("session", $sessionId, $expiry, "/"); }
