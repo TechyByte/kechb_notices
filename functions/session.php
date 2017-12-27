@@ -25,24 +25,28 @@ class session {
         }
         exit(); }
 
+    private function redirectLogin($code) {
+        header('Location: ' . ("https://sso-ext.techybyte.co.uk/login?".$code), true, 302);
+    }
+
     private function setCookie($sessionId, $expiry) { setcookie("session", $sessionId, $expiry, "/"); }
 
     public function checkSession() {
         if (!isset($_COOKIE["session"])) { //If session cookie doesn't exist
             $this->noSession(); //Set current session object to all-zero
             $this->setCookie($_COOKIE["session"], time()-1000);
-            $this->redirect("login/?h=t"); //Redirect to login page
+            $this->redirectLogin("h=t"); //Redirect to login page
         } else { //If session cookie does exist
             $this->fetchSession($_COOKIE["session"]); //Create session object based on session
             if ($this->sessionExpiry <= time()) { //If session expired
                 $this->killSession($_COOKIE["session"]);
                 $this->setCookie($_COOKIE["session"], time()-1000);
-                $this->redirect("login/?n=sexpa"); //Redirect to login, with note that session expired
+                $this->redirectLogin("n=sexpa"); //Redirect to login, with note that session expired
             }
             if ($this->getIp()!=$_SERVER["REMOTE_ADDR"]) { // If session being used on an alternate host
                 $this->killSession($_COOKIE["session"]);
                 $this->setCookie($_COOKIE["session"], time()-1000);
-                $this->redirect("login/?n=sexpb");
+                $this->redirectLogin("n=sexpb");
             }
         }
     }
