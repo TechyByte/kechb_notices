@@ -24,7 +24,7 @@ $session->checkSession();
     <style>
         .login-form {
             width: 25rem;
-            height: 23.75rem;
+            height: 16.75rem;
             position: fixed;
             top: 50%;
             margin-top: -11.375rem;
@@ -100,7 +100,7 @@ if (isset($_GET["n"])) {
         <small>Enter assembly date with no spaces or symbols in YYYYMMDD format.</small>
         <br />
         <div class="form-actions">
-            <button type="submit" name="submit" class="button primary">Change Password</button>
+            <button type="submit" name="submit" class="button primary">Add assembly</button>
             <!--<button type="button" class="button link">Cancel</button>-->
         </div>
     </form>
