@@ -2,7 +2,7 @@
 
 class db {
     public function connect() {
-        $mysqlObj = new mysqli("localhost", "id217864_notices", "vUDg6m4LVyAnq3JG", "id217864_notices");
+        $mysqlObj = new mysqli("localhost", "notices", "ucxcbtpkZqelCzwJ", "ebdb");
         //$mysqlObj = new mysqli("aa1aakoygzej97l.cubzqbptcrhl.eu-west-1.rds.amazonaws.com", "u9facwxv7q28", "EdSmAnU9TtbtZfv9", "ebdb");
         if ($mysqlObj->connect_errno) {
             die("Failed to connect to MySQL: " . $mysqlObj->connect_error);
