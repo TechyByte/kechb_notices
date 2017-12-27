@@ -377,7 +377,7 @@ $first = true;
         </div>
         <?php
 if ($session->group->getAdmin() == 1) { ?>
-    <div class="tile-container"><a href="account/password/" class="tile bg-lightBlue fg-white" data-role="tile"><div class="tile-content iconic"><span class="icon mif-plus"></span></div><span class="tile-label">Add Assembly</span></a></div>
+    <div class="tile-container"><a href="assemblies/add/" class="tile bg-lightBlue fg-white" data-role="tile"><div class="tile-content iconic"><span class="icon mif-plus"></span></div><span class="tile-label">Add Assembly</span></a></div>
     <div class="tile-container"><a href="notices/view/" class="tile bg-darkCobalt fg-white" data-role="tile"><div class="tile-content iconic"><span class="icon mif-list"></span></div><span class="tile-label">View All Notices</span></a></div>
     <div class="tile-container"><a href="notices/run/" class="tile bg-lighterBlue fg-white" data-role="tile"><div class="tile-content iconic"><span class="icon mif-film"></span></div><span class="tile-label">Run Notices</span></a></div>
     <!--<div class="tile bg-lightGreen fg-amber" data-role="tile" onclick="document.location.href='."'"."account/user/'".'"><div class="tile-content iconic"><span class="icon mif-users"></span></div><span class="tile-label">Add User</span></div>-->
