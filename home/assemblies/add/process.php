@@ -8,9 +8,13 @@ $session = new session();
 $session -> checkSession();
 if ($session->group->admin == 1) {
     if (isset($_POST["date"])) {
-        if (strlen($_POST["date"]) == 8 && is_numeric($_POST["date"]))
-        $db->queryForNothing("INSERT INTO `assemblies` (date) VALUES (". $_POST["date"] . ");");
-        redirect("home/assemblies/add/?n=suc"); //SUCCESS notice
+        if (strlen($_POST["date"]) == 8 && is_numeric($_POST["date"])) {
+            $idLookup = $db->queryForRow("SELECT MAX(id) FROM `assemblies`;");
+            $newId = $idLookup["MAX(id)"] + 1;
+            $db->queryForNothing("INSERT INTO `assemblies` (id, date) VALUES (". $newId . ", " . $_POST["date"] . ");");
+            redirect("home/assemblies/add/?n=suc"); //SUCCESS notice
+        }
+
     } else {
         redirect("home/assemblies/add/?n=ii"); //INVALID INPUT notice
         exit();
