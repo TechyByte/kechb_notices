@@ -4,6 +4,7 @@ include_once("../../../functions/notice.php");
 include_once("../../../functions/session.php");
 function redirect($url, $permanent = false) { header('Location: ' . ((((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://") . $_SERVER['HTTP_HOST'] . "/" . $url), true, $permanent ? 301 : 302); exit(); }
 $db = new db();
+
 $session = new session();
 $session -> checkSession();
 if ($session->group->admin == 1) {
